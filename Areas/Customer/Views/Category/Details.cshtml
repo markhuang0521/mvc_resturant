@@ -1,0 +1,23 @@
+﻿@model Resturant.Models.Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+    <h3>DetailsCategory</h3>
+
+<div class="backgroundWhite border" >
+
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    <div class="col-4 form-group">
+        <partial name="_detailAndBackBtn" model="Model.Id" />
+    </div>
+</div>
+

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Resturant.Models.Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info"> Category List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <partial name="_createButton" />
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+            
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                   
+                    <td>
+
+                        <partial name="_tableBtn" model="item.Id" />
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

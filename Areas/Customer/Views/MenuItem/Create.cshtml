@@ -1,0 +1,136 @@
+﻿@model Resturant.Models.MenuItemVm
+@using Resturant.Extension
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3 class="text-info"> Create Menu item</h3>
+<hr />
+<div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+        <div class="backgroundWhite border ">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    <input asp-for="MenuItem.Name" class="form-control" />
+                </div>
+                <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    @Html.TextAreaFor(m => m.MenuItem.Description)
+                </div>
+                <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    <input asp-for="MenuItem.Price" class="form-control" />
+                </div>
+                <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.Image" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    <input type="file" name="file" multiple class="form-control" />
+                </div>
+                <span asp-validation-for="MenuItem.Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    <select asp-for="@Model.MenuItem.CategoryId" id="CategoryId" asp-items="Model.Category.ToSelectListItem(Model.MenuItem.CategoryId)" class="form-control"></select>
+                </div>
+                <span asp-validation-for="MenuItem.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.SubCateId" class="col-form-label"></label>
+                </div>
+                <div class="col-5 ">
+                    <select id="SubCategoryId" name="SubCategoryId" asp-for="MenuItem.SubCateId" class="form-control" asp-items="@(new SelectList(string.Empty,"Id","Name"))"></select>
+                </div>
+                <span asp-validation-for="MenuItem.SubCateId" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="MenuItem.Spicyness" class="col-form-label"></label>
+                </div>
+                <div class="col-5">
+                    <select asp-for="MenuItem.Spicyness" asp-items="Html.GetEnumSelectList<MenuItem.ESpicy>()" class="form-control"></select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-5 ">
+                    <partial name="_createAndBackBtn" />
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+@section scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "lists",
+            menubar: 'file edit format'
+        });
+    </script>
+
+    <script>
+        
+
+        //on change for subcateogry list
+        $(document).ready(function () {
+            getSubCategory();
+
+            $("#CategoryId").on("change", function () {
+                getSubCategory();
+
+            })
+        })
+        
+        function getSubCategory() {
+            //getting the url for the api call
+            var url = '@Url.Content("~/")' + "Customer/SubCategory/GetSubCategory";
+            //locate the element
+            var ddlsoruce = '#CategoryId';
+
+            //using foreach for getting item values using Id inside a dropdown list
+            $.getJSON(url, { id: $(ddlsoruce).val() }, function (data) {
+                var items = '';
+                $('#SubCategoryId').empty();
+                $.each(data, function (i, subcategory) {
+                    items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                });
+                $('#SubCategoryId').html(items);
+            })
+        }
+
+    </script>
+}

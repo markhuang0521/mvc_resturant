@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Resturant.Models.MenuItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info"> Menu item List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <partial name="_createButton" />
+        </div>
+    </div>
+    @if (Model.Count() > 0)
+    {
+
+        <table class="table table-hover border">
+
+            <tr class="table-secondary">
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SubCategory)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Image)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubCategory.Name)
+                        </td>
+                        <td>
+                            <partial name="_tableBtn" model="item.Id" />
+
+                        </td>
+                    </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        <h4 class="text-danger"> no menu item available...</h4>
+    }
+</div>

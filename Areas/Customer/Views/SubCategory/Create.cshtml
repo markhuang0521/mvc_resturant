@@ -1,0 +1,80 @@
+﻿@model Resturant.Models.CategoryViewModel
+@using Resturant.Extension
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h3 class="text-info"> Create SubCategory</h3>
+<hr />
+<div class="backgroundWhite border row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="SubCategory.CategoryId" class="col-form-label"></label>
+                <select id="CategoryId" asp-for="SubCategory.CategoryId" asp-items="Model.CategoryList.ToSelectListItem(Model.SubCategory.CategoryId)" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubCategory.Name" class="control-label"></label>
+                <input asp-for="SubCategory.Name" class="form-control" />
+                <span asp-validation-for="SubCategory.Name" class="text-danger"></span>
+            </div>
+            <partial name="_createAndBackBtn" />
+        </form>
+    </div>
+
+    <div class="col-3 offset-2">
+        @if (Model.SubCategoryList.Count() > 0)
+        {
+        <p>Existing SubCategories</p>
+        <div id="SubCategoryList">
+            <ul class="list-group"></ul>
+        </div>
+
+        }
+    </div>
+</div>
+
+@section scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");}
+
+<script>
+    function updateSubcategory() {
+        var categoryId = document.getElementById("CategoryId").value;
+        console.log(categoryId)
+
+        $list = $("#SubCategoryList");
+        $.ajax({
+            url: '/Customer/SubCategory/GetSubcategory/' + categoryId,
+            type: 'GET',
+            dataType: 'text',
+            success: function (data) {
+                results = JSON.parse(data);
+                $list.html('');
+                $list.append('<ul class="list-group">');
+
+                for (i in results) {
+                    $list.append('<li class="list-group-item">' + results[i].text + '</li>');
+                }
+                $list.append('</ul>');
+
+            }
+        });
+        console.log($list);
+    }
+
+    $(document).ready(function () {
+        updateSubcategory();
+    });
+
+    $("#CategoryId").on("change", function () {
+        updateSubcategory();
+    });
+
+
+</script>
+}
+
+
